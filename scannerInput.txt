@@ -1,1 +1,6 @@
--o --longopt --input=file -a --ol -l -l -l -l -l -l
+-o --longopt --input=file -a --ol -l -l -l -l -l -p
+"ok this is an argument"
+
+"This is also argument"
+
+--longArgText="yes we can"

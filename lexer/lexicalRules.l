@@ -21,10 +21,25 @@
                                     return PARAMETER_TOKEN;
                                 };
 
-[ \t\n\r]                       return WHITESPACECHAR;
-\\\"                            return CHAR;
+                                
+
+[ \t\n\r]+                      {
+                                    yylval = malloc(sizeof(strlen(yytext)));
+                                    memcpy(yylval, yytext, strlen(yytext));
+                                    yylval[strlen(yytext)] = '\0';
+                                    return WHITESPACECHARS;
+                                };
 
 =                               return EQUAL;
+
+
+\\[a-zA-Z\"]                    {
+                                    yylval = malloc(sizeof(strlen(yytext)));
+                                    memcpy(yylval, yytext, strlen(yytext));
+                                    yylval[strlen(yytext)] = '\0';
+                                    return ESCAPE_SEQ; 
+                                };
+
 \"                              return DOUBLE_QUOTATION;
 .                               return -1;
 

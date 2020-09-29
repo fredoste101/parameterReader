@@ -10,6 +10,8 @@
     void yyerror (char const *s);
 
     extern inputParameterList list;
+
+    static char* concatStrings(char* str1, char* str2);
 %}
 
 //Declarations 
@@ -19,11 +21,11 @@
 %token SHORT_OPT
 %token LONG_OPT_START
 %token PARAMETER_TOKEN
-%token CHAR
-%token WHITESPACECHAR
+%token WHITESPACECHARS
 %token EQUAL
 %token DOUBLE_QUOTATION
 %token TEST
+%token ESCAPE_SEQ
 
 %start parameterList
 
@@ -32,7 +34,7 @@
 
     parameterList : 
         parameter |
-        parameterList whiteSpacing parameter;
+        parameterList WHITESPACECHARS parameter {free($2);};
         
 
     parameter : 
@@ -42,53 +44,90 @@
             free($1);
         }                                                       | 
 
-        longOpt             
-        {
-            handleLongOption(&list, $1);
-            free($1);
-        }                                                       | 
+        longOpt                                                 |
 
-        longOptWithArg                                          |
-
-        arg                 
+        arg                                                     
         {
             handleArgument(&list, $1);
-            free($1);
+            free($1);  
         }                                                       | 
 
         %empty                                                  ;
 
 
-    longOpt : LONG_OPT_START PARAMETER_TOKEN 
-    {
-        $$ = $2;
-    };
-
-
-    longOptWithArg : 
+    longOpt : 
+        LONG_OPT_START PARAMETER_TOKEN 
+        {
+            handleLongOption(&list, $2);
+            free($2);
+        }                                                         | 
+    
         LONG_OPT_START PARAMETER_TOKEN EQUAL arg 
         {
             handleLongOptionWithArg(&list, $2, $4); 
             free($2); 
             free($4);
         };
+        
 
 
     arg : 
-        DOUBLE_QUOTATION string DOUBLE_QUOTATION  | 
-        PARAMETER_TOKEN {$$ = $1;};
+        DOUBLE_QUOTATION string DOUBLE_QUOTATION  
+        {
+            $$ = $2;
+        }                                                           |
+
+        PARAMETER_TOKEN 
+        {
+            $$ = $1;
+        };
 
 
     string : 
-        string PARAMETER_TOKEN  | 
-        string CHAR             |  
-        string whiteSpacing     | 
-        %empty;
+        string PARAMETER_TOKEN  
+        {
+            if($1 == NULL)
+            {
+                $$ = $2;
+            }
+            else
+            {
+                $$ = concatStrings($1, $2);
+                free($1);
+                free($2);
+            }
+        };                                      |
 
+        string WHITESPACECHARS   
+        {
+            if($1 == NULL)
+            {
+                $$ = $2;
+            }
+            else
+            {
+                $$ = concatStrings($1, $2);
+                free($1);
+                free($2);
+            }
+        };                                      |
 
-    whiteSpacing : 
-        WHITESPACECHAR              | 
-        whiteSpacing WHITESPACECHAR ;
+        string ESCAPE_SEQ       
+        {
+            if($1 == NULL)
+            {
+                $$ = $2;
+            }
+            else
+            {
+                $$ = concatStrings($1, $2);
+                free($1);
+                free($2);
+            }
+        };                                      | 
+
+        %empty {$$ = NULL;};
+
 
 %%
 
@@ -99,4 +138,19 @@
 void yyerror (char const *s)
 {
     fprintf (stderr, "%s\n", s);
+}
+
+
+static char* concatStrings(char* str1, char* str2)
+{
+    size_t stringSize   = sizeof(char) * (strlen(str1) + strlen(str2) + 1);
+    char* resultStr     = (char*)malloc(stringSize);
+    
+    memset(resultStr, '\0', stringSize);
+    
+    memcpy(resultStr, str1, strlen(str1));
+
+    memcpy(&resultStr[strlen(str1)], str2, strlen(str2));
+
+    return resultStr;
 }

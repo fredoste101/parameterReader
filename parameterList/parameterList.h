@@ -15,7 +15,6 @@ enum ParameterType
     PARAM_TYPE_EMPTY_LONG_OPT,     //Ex --
     PARAM_TYPE_LONG_OPT_WITH_ARG,  //Ex --file=input.txt
     PARAM_TYPE_ARG,                //Ex input.txt
-    PARAM_TYPE_STRING_ARG          //Ex "this is a input string"
 };
 
 

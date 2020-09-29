@@ -8,10 +8,12 @@ PARAMETER_LIST_PATH = ./parameterList/
 
 BUILD_PATH = ./build/
 
+TEST_PATH = ./test/
+
 all : $(BUILD_PATH)lexer $(BUILD_PATH)parser
 
 
-test : $(BUILD_PATH)lexer $(BUILD_PATH)parser test/test.c $(BUILD_PATH)parameterList
+test : $(BUILD_PATH)lexer $(BUILD_PATH)parser $(TEST_PATH)test.c $(BUILD_PATH)parameterList
 	gcc -o $(BUILD_PATH)test test/test.c $(BUILD_PATH)lexer $(BUILD_PATH)parser $(BUILD_PATH)parameterList -I parameterList/ -I build/
 
 
@@ -19,12 +21,7 @@ $(BUILD_PATH)parameterList : $(PARAMETER_LIST_PATH)parameterList.c $(PARAMETER_L
 	./createBuildDir.sh && gcc -c -o $@ $<
 
 
-$(BUILD_PATH)parser : $(BUILD_PATH)parser.c ./parameterList/parameterList.c 
-	./createBuildDir.sh && gcc  -c -o $@ $< -I ./parameterList/
 
-	
-$(BUILD_PATH)parser.c : $(PARSER_PATH)grammar.y
-	./createBuildDir.sh && bison $< -o $(BUILD_PATH)parser.c
 
 
 
@@ -35,8 +32,18 @@ $(BUILD_PATH)lexer : $(BUILD_PATH)lexer.c
 
 
 $(BUILD_PATH)lexer.c : $(LEXER_PATH)lexicalRules.l $(BUILD_PATH)parser.h
-	./createBuildDir.sh && flex -o $@ $<
+	./createBuildDir.sh && flex --header-file=$(BUILD_PATH)lexer.h -o $@ $<
 
+
+
+#PARSER
 
 $(BUILD_PATH)parser.h : $(PARSER_PATH)grammar.y
 	./createBuildDir.sh && bison -d $< -o $(BUILD_PATH)parser.c
+
+$(BUILD_PATH)parser : $(BUILD_PATH)parser.c ./parameterList/parameterList.c 
+	./createBuildDir.sh && gcc  -c -o $@ $< -I ./parameterList/
+
+	
+$(BUILD_PATH)parser.c : $(PARSER_PATH)grammar.y
+	./createBuildDir.sh && bison $< -o $(BUILD_PATH)parser.c

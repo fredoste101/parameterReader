@@ -6,10 +6,15 @@ inputParameterList list;
 
 int main()
 {
+    printf("\nTesting....\n");
+
     memset(&list, 0, sizeof(list));
 
     list.list = NULL;
+    printf("\nSTARTING PARSE\n");
     yyparse();
+
+    printf("\nnumOfElements=%d\n", list.numOfElements);
 
     inputParameter p;
     getInputParameterAtIndex(&list, 0, &p);
@@ -24,7 +29,8 @@ int main()
 
 
     getInputParameterAtIndex(&list, i, &p);
-    printf("\nArg: %s\n", p.value);*/
+    printf("\nArg: %s\n", p.value);
+*/
 
 
     unsigned int i = 0;
