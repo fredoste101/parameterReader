@@ -1,0 +1,1 @@
+int parameterReader(int argc, char* argv[], inputParameterList* listP);

@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define INPUT_PARAMETER_LIST_INCREMENT_SIZE 10
+
 
 enum ParameterType
 {  
@@ -35,7 +35,11 @@ typedef struct inputParameterList
 
 
 int indexOfInputParameter(inputParameterList* list, char* param);
-void getInputParameterAtIndex(inputParameterList* list, const unsigned int index, inputParameter* p);
-static void removeInputParameter(inputParameterList* list, unsigned int index);
+
+void getInputParameterAtIndex(inputParameterList* list, 
+                              const unsigned int index, 
+                              inputParameter* p);
+
+void removeInputParameter(inputParameterList* list, unsigned int index);
 
 #endif

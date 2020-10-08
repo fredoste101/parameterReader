@@ -1,8 +1,9 @@
 #include "parameterList.h"
 
+#define INPUT_PARAMETER_LIST_INCREMENT_SIZE 10
+
 
 static void increaseSizeOfList(inputParameterList* list);
-static void removeInputParameter(inputParameterList* list, unsigned int index);
 
 
 int indexOfInputParameter(inputParameterList* list, char* param)
@@ -32,7 +33,7 @@ void getInputParameterAtIndex(inputParameterList* list, const unsigned int index
 }
 
 
-static void removeInputParameter(inputParameterList* list, unsigned int index)
+void removeInputParameter(inputParameterList* list, unsigned int index)
 {
 
     //Remove allocated value

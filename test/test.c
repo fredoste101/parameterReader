@@ -1,36 +1,25 @@
 #include <stdio.h>
 #include <parameterList.h>
-#include <parser.h>
+#include <parameterReader.h>
 
-inputParameterList list;
 
-int main()
+int main(int argc, char* argv[])
 {
     printf("\nTesting....\n");
+
+    inputParameterList list;
 
     memset(&list, 0, sizeof(list));
 
     list.list = NULL;
     printf("\nSTARTING PARSE\n");
-    yyparse();
+
+    parameterReader(argc, argv, &list);
 
     printf("\nnumOfElements=%d\n", list.numOfElements);
 
     inputParameter p;
     getInputParameterAtIndex(&list, 0, &p);
-
-
-/*
-    printf("\nType: %d %c\n", p.type, *p.value);
-
-    int i = indexOfInputParameter(&list, "input");
-
-    printf("\n index: %d \n", i);
-
-
-    getInputParameterAtIndex(&list, i, &p);
-    printf("\nArg: %s\n", p.value);
-*/
 
 
     unsigned int i = 0;

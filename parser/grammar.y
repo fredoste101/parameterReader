@@ -7,14 +7,16 @@
 
 
     extern int yylex();
-    void yyerror (char const *s);
+    void yyerror (inputParameterList *listP, char const *s);
 
-    extern inputParameterList list;
 
     static char* concatStrings(char* str1, char* str2);
 %}
 
 //Declarations 
+
+%code requires {#include <parameterListParserApi.h>}
+%parse-param {inputParameterList *listP}
 
 %define api.value.type {char *}
 
@@ -40,7 +42,7 @@
     parameter : 
         SHORT_OPT           
         {
-            handleShortOption(&list, $1);
+            handleShortOption(listP, $1);
             free($1);
         }                                                       | 
 
@@ -48,7 +50,7 @@
 
         arg                                                     
         {
-            handleArgument(&list, $1);
+            handleArgument(listP, $1);
             free($1);  
         }                                                       | 
 
@@ -58,13 +60,13 @@
     longOpt : 
         LONG_OPT_START PARAMETER_TOKEN 
         {
-            handleLongOption(&list, $2);
+            handleLongOption(listP, $2);
             free($2);
         }                                                         | 
     
         LONG_OPT_START PARAMETER_TOKEN EQUAL arg 
         {
-            handleLongOptionWithArg(&list, $2, $4); 
+            handleLongOptionWithArg(listP, $2, $4); 
             free($2); 
             free($4);
         };
@@ -135,7 +137,7 @@
 
 
 
-void yyerror (char const *s)
+void yyerror (inputParameterList *listP, char const *s)
 {
     fprintf (stderr, "%s\n", s);
 }
