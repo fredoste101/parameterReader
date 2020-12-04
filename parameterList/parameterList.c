@@ -98,7 +98,7 @@ void handleShortOption(inputParameterList* list, char* value)
 
     inputParameter input;
     memset(&input, 0, sizeof(input));
-    
+
     input.type = PARAM_TYPE_SHORT_OPT;
 
     for(i = 0; i < numOfArgs; i++)
@@ -108,6 +108,7 @@ void handleShortOption(inputParameterList* list, char* value)
         *(input.value)  = value[i+1];
 
         enqueueInputParameter(list, &input);
+
     }
 }
 

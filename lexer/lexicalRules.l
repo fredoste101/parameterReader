@@ -3,31 +3,32 @@
     #include <parameterList.h>
 %}
 
+%option prefix="paramReader_"
 
 %%
 
 -[a-zA-Z]+                      {
-                                    yylval = malloc(sizeof(strlen(yytext)));
-                                    memcpy(yylval, yytext, strlen(yytext));
-                                    yylval[strlen(yytext)] = '\0';
+                                    paramReader_lval = malloc(sizeof(strlen(paramReader_text)) + 1);
+                                    memcpy(paramReader_lval, paramReader_text, strlen(paramReader_text));
+                                    paramReader_lval[strlen(paramReader_text)] = '\0';
                                     return SHORT_OPT;
                                 };
 
 --                              return LONG_OPT_START;
 
 [a-zA-Z0-9][a-zA-Z0-9\_\-\.]*  {
-                                    yylval = malloc(sizeof(strlen(yytext)));
-                                    memcpy(yylval, yytext, strlen(yytext));
-                                    yylval[strlen(yytext)] = '\0';
+                                    paramReader_lval = malloc(sizeof(strlen(paramReader_text)) + 1);
+                                    memcpy(paramReader_lval, paramReader_text, strlen(paramReader_text));
+                                    paramReader_lval[strlen(paramReader_text)] = '\0';
                                     return PARAMETER_TOKEN;
                                 };
 
                                 
 
 [ \t\n\r]+                      {
-                                    yylval = malloc(sizeof(strlen(yytext)));
-                                    memcpy(yylval, yytext, strlen(yytext));
-                                    yylval[strlen(yytext)] = '\0';
+                                    paramReader_lval = malloc(sizeof(strlen(paramReader_text)) + 1);
+                                    memcpy(paramReader_lval, paramReader_text, strlen(paramReader_text));
+                                    paramReader_lval[strlen(paramReader_text)] = '\0';
                                     return WHITESPACECHARS;
                                 };
 
@@ -35,18 +36,18 @@
 
 
 \\[a-zA-Z\"]                    {
-                                    yylval = malloc(sizeof(strlen(yytext)));
-                                    memcpy(yylval, yytext, strlen(yytext));
-                                    yylval[strlen(yytext)] = '\0';
+                                    paramReader_lval = malloc(sizeof(strlen(paramReader_text)) + 1);
+                                    memcpy(paramReader_lval, paramReader_text, strlen(paramReader_text));
+                                    paramReader_lval[strlen(paramReader_text)] = '\0';
                                     return ESCAPE_SEQ; 
                                 };
 
 \"                              return DOUBLE_QUOTATION;
-.                               return -1;
+.                               {return -1;};
 
 %%
 
-int yywrap(void)
+int paramReader_wrap(void)
 {
     return 1;
 }

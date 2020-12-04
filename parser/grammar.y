@@ -6,8 +6,8 @@
     #include <parameterListParserApi.h>
 
 
-    extern int yylex();
-    void yyerror (inputParameterList *listP, char const *s);
+    extern int paramReader_lex();
+    void paramReader_error (inputParameterList *listP, char const *s);
 
 
     static char* concatStrings(char* str1, char* str2);
@@ -28,6 +28,8 @@
 %token DOUBLE_QUOTATION
 %token TEST
 %token ESCAPE_SEQ
+
+%define api.prefix {paramReader_}
 
 %start parameterList
 
@@ -137,7 +139,7 @@
 
 
 
-void yyerror (inputParameterList *listP, char const *s)
+void paramReader_error (inputParameterList *listP, char const *s)
 {
     fprintf (stderr, "%s\n", s);
 }

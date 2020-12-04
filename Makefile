@@ -19,6 +19,8 @@ all : $(BUILD_PATH)lexer $(BUILD_PATH)parser
 test : $(TEST_PATH)test.c $(BUILD_PATH)parameterReader
 	gcc -o $(BUILD_PATH)test test/test.c $(BUILD_PATH)parameterReader $(BUILD_PATH)parameterList $(BUILD_PATH)lexer $(BUILD_PATH)parser -I $(PARAMETER_READER_PATH) -I $(PARAMETER_LIST_PATH)
 
+lib : $(BUILD_PATH)parameterReader
+	ar rcs parameterReaderLib/libParameterReader.a $(BUILD_PATH)parameterReader $(BUILD_PATH)parameterList $(BUILD_PATH)lexer $(BUILD_PATH)parser
 
 
 #PARAMETERREADER - main functionality
