@@ -48,6 +48,7 @@ void removeInputParameter(inputParameterList* list, unsigned int index)
         free(list->list[index].arg);
     }
 
+    //This can probably be done a lot nicer. Also kind of makes this operation a shift more than a remove
     for(index; index < (list->numOfElements - 1); index++)
     {
         memcpy(&list->list[index], &list->list[index+1], sizeof(inputParameter));

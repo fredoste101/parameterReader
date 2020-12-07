@@ -40,6 +40,12 @@ void getInputParameterAtIndex(inputParameterList* list,
                               const unsigned int index, 
                               inputParameter* p);
 
+/**
+ * @brief Frees all allocated memory related to the parameter at given index
+ * 
+ * @param[in/out] list 
+ * @param[in] index 
+ */
 void removeInputParameter(inputParameterList* list, unsigned int index);
 
 #endif

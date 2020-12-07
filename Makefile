@@ -13,6 +13,10 @@ BUILD_PATH = ./build/
 
 TEST_PATH = ./test/
 
+OPTIMZE_LEVEL = -O3
+
+
+
 all : $(BUILD_PATH)lexer $(BUILD_PATH)parser
 
 
@@ -26,14 +30,14 @@ lib : $(BUILD_PATH)parameterReader
 #PARAMETERREADER - main functionality
 
 $(BUILD_PATH)parameterReader : $(PARAMETER_READER_PATH)parameterReader.c $(PARAMETER_READER_PATH)parameterReader.h $(BUILD_PATH)lexer $(BUILD_PATH)parser $(BUILD_PATH)parameterList
-	./createBuildDir.sh && gcc -c -o $(BUILD_PATH)parameterReader $(PARAMETER_READER_PATH)parameterReader.c  -I $(PARAMETER_LIST_PATH) -I $(BUILD_PATH)
+	./createBuildDir.sh && gcc $(OPTIMZE_LEVEL) -c -o $(BUILD_PATH)parameterReader $(PARAMETER_READER_PATH)parameterReader.c  -I $(PARAMETER_LIST_PATH) -I $(BUILD_PATH)
 
 
 
 #PARAMETERLIST
 
 $(BUILD_PATH)parameterList : $(PARAMETER_LIST_PATH)parameterList.c $(PARAMETER_LIST_PATH)parameterList.h $(PARAMETER_LIST_PATH)parameterListParserApi.h
-	./createBuildDir.sh && gcc -c -o $@ $<
+	./createBuildDir.sh && gcc $(OPTIMZE_LEVEL) -c -o $@ $<
 
 
 
@@ -43,7 +47,7 @@ $(BUILD_PATH)parameterList : $(PARAMETER_LIST_PATH)parameterList.c $(PARAMETER_L
 #LEXER
 
 $(BUILD_PATH)lexer : $(BUILD_PATH)lexer.c
-	./createBuildDir.sh && gcc -c -o $@ $< -I $(BUILD_PATH) -I $(PARAMETER_LIST_PATH)
+	./createBuildDir.sh && gcc $(OPTIMZE_LEVEL) -c -o $@ $< -I $(BUILD_PATH) -I $(PARAMETER_LIST_PATH)
 
 
 $(BUILD_PATH)lexer.c : $(LEXER_PATH)lexicalRules.l $(BUILD_PATH)parser.h
@@ -57,7 +61,7 @@ $(BUILD_PATH)parser.h : $(PARSER_PATH)grammar.y
 	./createBuildDir.sh && bison -d $< -o $(BUILD_PATH)parser.c
 
 $(BUILD_PATH)parser : $(BUILD_PATH)parser.c ./parameterList/parameterList.c 
-	./createBuildDir.sh && gcc  -c -o $@ $< -I ./parameterList/
+	./createBuildDir.sh && gcc $(OPTIMZE_LEVEL) -c -o $@ $< -I ./parameterList/
 
 	
 $(BUILD_PATH)parser.c : $(PARSER_PATH)grammar.y
